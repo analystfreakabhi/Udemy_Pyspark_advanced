@@ -1,0 +1,31 @@
+******************************
+Zeppelin tutorial : 
+******************************
+
+Contents : 
+What is Zeppelin
+features
+##Installation steps
+what are interpreters
+getting started
+first notebook ( hello world )
+switching the interpreters and adding dependencies 
+e.g. pyspark
+
+pyspark with jdbc:
+
+
+
+%md 
+Zeppelin notebooks support multiple language as backend tool
+
+1) default : scala with spark
+2) %sh : shell
+3) %md : markdown
+4) %sql : spark SQL
+5) %pyspark : pyspark
+
+%sql
+
+select to_date(payment_date), sum(amount) amt from payment group by to_date(payment_date) order by to_date(payment_date) limit 30
+

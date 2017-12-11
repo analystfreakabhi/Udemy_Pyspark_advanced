@@ -1,0 +1,147 @@
+Spark SQL, Spark’s interface for working with structured and semistructured data.
+
+Structured data is any data that has a schema—that is, a known
+set of fields for each record. When you have this type of data, Spark SQL makes it
+both easier and more efficient to load and query. In particular, Spark SQL provides
+three main capabilities (illustrated in Figure 9-1):
+1. It can load data from a variety of structured sources (e.g., JSON, Hive, and
+Parquet).
+2. It lets you query the data using SQL, both inside a Spark program and from
+external tools that connect to Spark SQL through standard database connectors
+(JDBC/ODBC), such as business intelligence tools like Tableau.
+3. When used within a Spark program, Spark SQL provides rich integration
+between SQL and regular Python/Java/Scala code, including the ability to join
+RDDs and SQL tables, expose custom functions in SQL, and more. Many jobs are
+easier to write using this combination.
+
+Spark SQL is a Spark library that runs on top of Spark. It provides a higher-level abstraction than the Spark core API for processing structured data. Structured data includes data stored in a database, NoSQL data store, Parquet, ORC, Avro, JSON, CSV, or any other structured format.
+
+Spark SQL is more than just about providing SQL interface to Spark. It was designed with the broader goals of making Spark easier to use, increasing developer productivity, and making Spark applications
+run faster.
+Spark SQL can be used as a library for developing data processing applications in Scala, Java, Python, or R. It supports multiple query languages, including SQL, HiveQL, and language integrated queries. In addition, it can be used for interactive analytics with just SQL/HiveQL. In both cases, it internally uses the
+Spark core API to execute queries on a Spark cluster. 
+
+Spark SQL seamlessly integrates with other Spark libraries such as Spark Streaming, Spark ML, and GraphX (see Figure 7-1). It can be used for not only interactive and batch processing of historical data but also live data stream processing along with Spark Streaming.
+
+Performance
+Spark SQL makes data processing applications run faster using a combination of techniques, including
+reduced disk I/O, in-memory columnar caching, query optimization, and code generation.
+
+/*******************************************************************/
+Apache Spark SQLContext vs HiveContext?
+
+SQLContext is the main entry point into the Spark SQL library. It is a class defined in the Spark SQL library.
+A Spark SQL application must create an instance of the SQLContext or HiveContext class.
+SQLContext is required to create instances of the other classes provided by the Spark SQL library. It is
+also required to execute SQL queries
+
+
+Obviously if you want to work with Hive you have to use HiveContext. Beyond that the biggest difference as for now (Spark 1.5) is a support for window functions and ability to access Hive UDFs.
+
+Generally speaking window functions are a pretty cool feature and can be used to solve quite complex problems in a concise way without going back and forth between RDDs and DataFrames. Performance is still far from optimal especially without PARTITION BY clause but it is really nothing Spark specific.
+
+Regarding Hive UDFs it is not a serious issue now, but before Spark 1.5 many SQL functions have been expressed using Hive UDFs and required HiveContext to work.
+
+SQLContext is the main entry point into the Spark SQL library. It is a class defined in the Spark SQL library.A Spark SQL application must create an instance of the SQLContext or HiveContext class.
+
+### big data spark 
+SQLContext is required to create instances of the other classes provided by the Spark SQL library. It is also required to execute SQL queries.
+
+The SQLContext class provides a method named sql, which executes a SQL query using Spark. It takes a SQL
+statement as an argument and returns the result as an instance of the DataFrame class.
+val resultSet = sqlContext.sql("SELECT count(1) FROM my_table")
+
+HiveContext is an alternative entry point into the Spark SQL library. It extends the SQLContext class for
+processing data stored in Hive. It also provides a HiveQL parser. A Spark SQL application must create an
+instance of either this class or the SQLContext class.
+HiveContext provides a superset of the functionality provided by SQLContext. The parser that comes
+with HiveContext is more powerful than the SQLContext parser. It can execute both HiveQL and SQL queries.
+
+If you want to process Hive tables or execute HiveQL queries on any data source, you must create an instance of the HiveContext class. It is required for working with tables defined in the Hive metastore. In addition, if you want to process existing Hive tables, add your hive-site.xml file to Spark’s classpath, since
+HiveContext reads Hive configuration from the hive-site.xml file.
+
+
+DataFrame
+DataFrame is Spark SQL’s primary data abstraction. It represents a distributed collection of rows organized into named columns. It is inspired by DataFrames in R and Python. Conceptually, it is similar to a table in a relational database.
+
+DataFrame is a class defined in the Spark SQL library. It provides various methods for processing and analyzing structured data. For example, it provides methods for selecting columns, filtering rows,aggregating columns, joining tables, sampling data, and other common data processing tasks.
+
+
+toDF
+Spark SQL provides an implicit conversion method named toDF, which creates a DataFrame from an RDD of objects represented by a case class. When this technique is used, Spark SQL infers the schema of a dataset.
+The toDF method is not defined in the RDD class, but it is available through an implicit conversion. To convert an RDD to a DataFrame using toDF, you need to import the implicit methods defined in the implicits object, as shown next
+
+
+Spark SQL provides a unified interface for creating a DataFrame from a variety of data sources. For example,the same API can be used to create a DataFrame from a MySQL, PostgreSQL, Oracle, or Cassandra table.
+Similarly, the same API can be used to create a DataFrame from a Parquet, JSON, ORC or CSV file on local file system, HDFS or S3.
+
+
+Row
+Row is a Spark SQL abstraction for representing a row of data. Conceptually, it is equivalent to a relational tuple or row in a table.Spark SQL provides factory methods to create Row objects. An example is shown next.
+
+In addition to the generic method shown earlier for creating a DataFrame from a variety of data sources,Spark SQL provides special methods for creating a DataFrame from the data sources for which it has built-in support for. These data sources include Parquet, ORC, JSON, Hive, and JDBC-compliant databases
+############################
+
+DataFrame API
+ DataFrame is a distributed collection of rows with a
+homogeneous schema
+
+
+Spark SQL shell
+
+https://www.dezyre.com/article/spark-sql-for-relational-big-data-processing/355
+
+Spark SQL is a Spark module for processing a structured data. This chapter is divided into the
+following recipes:
+ff Understanding the Catalyst optimizer
+ff Creating HiveContext
+ff Inferring schema using case classes
+ff Programmatically specifying the schema
+ff Loading and saving data using the Parquet format
+ff Loading and saving data using the JSON format
+ff Loading and saving data from relational databases
+ff Loading and saving data from an arbitrary source
+
+
+********
+Running SQL is only a part of the reason for the creation of Spark SQL. One big reason is that
+it helps to create and run Spark programs faster. It lets developers write less code, program
+read less data, and let the catalyst optimizer do all the heavy lifting.Spark SQL uses a programming abstraction called DataFrame. It is a distributed collection of data organized in named columns. DataFrame is equivalent to a database table, but provides much finer level of optimization. The DataFrame API also ensures that Spark's performance is consistent across different language bindings.
+Let's contrast DataFrames with RDDs. An RDD is an opaque collection of objects with no idea
+about the format of the underlying data. In contrast, DataFrames have schema associated
+with them. You can also look at DataFrames as RDDs with schema added to them. In fact,
+until Spark 1.2, there was an artifact called SchemaRDD, which has now evolved into
+DataFrame. They provide much richer functionality than SchemaRDDs.
+
+The DataFrame API is available in Scala, Java, Python, and also R starting Spark 1.4.
+Users can perform relational operations on DataFrames using a domain-specific language
+(DSL). DataFrames support all the common relational operators and they all take expression
+objects in a limited DSL that lets Spark capture the structure of the expression.
+
+We will start with the entry point into Spark SQL, that is, SQLContext. We will also cover
+HiveContext that is a wrapper around SQLContext to support Hive functionality. Please note
+that HiveContext is more battle-tested and provides a richer functionality, so it is strongly
+recommended to use it even if you do not plan to connect to Hive. Slowly, SQLContext will
+come to the same level of functionality as HiveContext i
+
+Spark Cook book : 
+
+Spark SQL. HiveContext provides a superset of functionality provided by SQLContext. The
+additional features are:
+ff More complete and battle-tested HiveQL parser
+ff Access to Hive UDFs
+ff Ability to read data from Hive tables
+
+
+Apart from these, there are so many other external data sources supported through thirdparty
+packages:
+JSON
+Parquet
+Hive
+MySQL
+PostgreSQL
+HDFS
+Plain Text
+Amazon S3
+ORC
+JDBC

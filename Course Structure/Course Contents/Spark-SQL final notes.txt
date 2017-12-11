@@ -1,0 +1,63 @@
+Spark SQL is spark library to work with Structured as well as semi-structured data.
+Since data pertains to strucutre, its helps with optimization and runs 10x times faster.
+
+Spark SQL provide abstractions on the top of RDD, called dataFrames and Datasets.
+
+Spark SQL does not have metaStore of its own, but it uses hive metaStore
+
+Spark SQL supports accessing data using standard SQL queries and HiveQL, a SQL-like query language that Hive uses. In this chapter, we will explore different features of Spark SQL. It supports a subset of HiveQL as well as a subset of SQL 92. It runs SQL/HiveQL queries alongside, or replacing the existing Hive deployments 
+
+There are two api's; SQL and Dataframe DSL
+
+
+Works with variety of data sources : 
+JSON, parget, CSV, ...
+
+ Spark SQL can automatically infer the schema of these ;  Python – Sampling the Dataset
+
+
+Dataframe is table of data with rows and columns, list of columns and types in those col is the Schema. A simple analogy would be a spreadsheet with names columns. This concept is derived from python and R. fundamental difference, is Spark Dataframe are distributed accross the nodes in the clster. since Spark has interfaces for both python and R, its quite easy to Convert to pandas and Dataframes.
+
+Spark has several core abstractions, Datasets, Dataframes, SQL Tables and RDD.
+
+Lazy eval mens that spark will wait until the very last moment to execute your transformations.
+
+
+DataFrame is a distributed collection of rows with a homogeneous schema, its resembles to table in RDBMS, with rows and columns.
+ Spark SQL uses a nested data model based on Hive
+ It supports all major SQL data types, including boolean, integer, double,
+decimal, string, date, timestamp and also User Defined Data types
+
+
+*****************
+
+Advanced Analytics Features
+
+1.Schema Inference for Semi structured Data
+2.Query Federation to External Databases
+3.Integration with Spark’s Machine
+Learning Library
+
+
+#######################################
+data catalogs : 
+Spark SQL
+provides a minimalist API known as Catalog API for data processing applications to query
+and use the metadata in the applications. The Catalog API exposes a catalog abstraction
+with many databases in it. For the regular SparkSession, it will have only one database,
+namely default. But if Spark is used with Hive, then the entire Hive meta store will be
+available through the Catalog API. The following code snippets demonstrate the usage of
+Catalog API in Scala and Pytho
+
+scala> val latestTableList = catalog.listTables()
+latestTableList:
+org.apache.spark.sql.Dataset[org.apache.spark.sql.
+
+
+#################### catalyst ###############################
+
+Cost Based Optimizer
+New in version dbr-3.3.
+
+Spark SQL can use a Cost Based Optimizer to improve query plans. This is especially useful for queries with multiple joins. For this to work it is critical to collect table and column statistics and keep them up to date.
+

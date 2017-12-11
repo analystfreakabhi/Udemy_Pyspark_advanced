@@ -1,0 +1,18 @@
+******************************
+Zeppelin tutorial : 
+******************************
+
+Contents : 
+What is Zeppelin
+features
+##Installation steps
+what are interpreters
+getting started
+first notebook ( hello world )
+switching the interpreters and adding dependencies 
+e.g. pyspark
+
+pyspark with jdbc:
+
+
+
